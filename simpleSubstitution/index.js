@@ -1,5 +1,6 @@
 const textToNumbers = require('../utils/textToNumbers.js')
 
+// setup and creating the key
 const numbers = []
 for (let i = 0; i < 27; i++) {
   numbers.push(i)
@@ -13,37 +14,43 @@ while (index--) {
   numbers.splice(keyIndex, 1)
 }
 
-
 const plainText = 'fourscoreandsevenyearsago'
 const textKeys = Object.keys(textToNumbers)
 
-const split = plainText.split('')
-const numericalText = split.map(letter => textToNumbers[letter])
-
-// encrypt the plaintext
-const numericalCipherText = numericalText.map(number => key[number])
-const cipherTextArray = numericalCipherText.map(number => textKeys[number])
-
-let cipherText = ''
-
-cipherTextArray.forEach(letter => {
-  cipherText += letter
-})
-
-// decrypt the cipherText
-const reverseNumericalCipher = cipherTextArray.map(letter => textToNumbers[letter])
-const reverseNumericalDecipher = reverseNumericalCipher.map(number => key.indexOf(number))
-const decipheredTextArray = reverseNumericalDecipher.map(number => textKeys[number])
-
-let decipheredText = ''
-
-decipheredTextArray.forEach(letter => {
-  decipheredText += letter
-})
+const cipherText = encrypt(plainText)
+const decipheredText = decrypt(cipherText)
 
 // console logging
+console.log('\n')
+console.log(key)
+console.log('\n')
 console.log(plainText)
-console.log('\n')
 console.log(cipherText)
-console.log('\n')
 console.log(decipheredText)
+
+function encrypt(plainText) {
+  const split = plainText.split('')
+  const numericalText = split.map(letter => textToNumbers[letter])
+  
+  const numericalCipherText = numericalText.map(number => key[number])
+  const cipherTextArray = numericalCipherText.map(number => textKeys[number])
+  
+  let cipherText = ''
+  cipherTextArray.forEach(letter => {
+    cipherText += letter
+  })
+  return cipherText
+}
+
+function decrypt(cipherText) {
+  const split = cipherText.split('')
+  const reverseNumericalCipher = split.map(letter => textToNumbers[letter])
+  const reverseNumericalDecipher = reverseNumericalCipher.map(number => key.indexOf(number))
+  const decipheredTextArray = reverseNumericalDecipher.map(number => textKeys[number])
+  
+  let decipheredText = ''
+  decipheredTextArray.forEach(letter => {
+    decipheredText += letter
+  })
+  return decipheredText
+}
