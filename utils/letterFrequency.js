@@ -23,5 +23,3 @@ function letterFrequency(text) {
 
   return frequencyMap
 }
-
-console.log(letterFrequency('hello'))
