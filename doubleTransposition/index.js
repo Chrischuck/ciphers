@@ -45,7 +45,14 @@ function encrypt(plainText) {
       matrix[i][ swap[1] ] = temp
     }
   })
-  console.log(matrix)
+
+  let ciperText = ''
+  matrix.forEach(row => {
+    row.forEach(letter => {
+      ciperText += letter
+    })
+  })
+  return ciperText
 }
 
-encrypt(plainText)
+console.log(encrypt(plainText))
