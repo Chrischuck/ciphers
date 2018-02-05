@@ -1,4 +1,4 @@
-const engLetterFreq = require('../engLetterFrequency')
+const engLetterFreq = require('../data/engLetterFrequency')
 const getLetterFreq = require('../letterFrequency')
 
 module.exports = makeGuessKey

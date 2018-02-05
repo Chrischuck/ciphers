@@ -1,4 +1,4 @@
-const textToNumbers = require('../utils/textToNumbers.js')
+const textToNumbers = require('../utils/data/textToNumbers.js')
 
 // setup and creating the key
 const numbers = []
