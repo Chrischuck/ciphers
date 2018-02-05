@@ -55,4 +55,8 @@ function encrypt(plainText) {
   return ciperText
 }
 
+function decrypt() {
+  console.log(decrpyt)
+}
+
 console.log(encrypt(plainText))
