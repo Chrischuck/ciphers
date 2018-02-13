@@ -64,7 +64,9 @@ function decrypt(cipherText, transpositions, rowLength, colLength) {
   const matrix = []
   const { rows, columns } = transpositions
   // reverse rows and columns
-  
+  const reversedRows = rows.map(row => [row[1], row[0]])
+  const reverseColumns = columns.map(col => [col[1], col[0]])
+
   for (let i = 0; i < colLength; i++) {
     matrix.push([])
   }
@@ -83,13 +85,13 @@ function decrypt(cipherText, transpositions, rowLength, colLength) {
     }
   }
 
-  rows.forEach(swap => {
+  reversedRows.forEach(swap => {
     const temp = [ ...matrix[ swap[0] ] ]
     matrix[ swap[0] ] = matrix[ swap[1] ]
     matrix[ swap[1] ] = temp
   })
 
-  columns.forEach(swap => {
+  reverseColumns.forEach(swap => {
     for (let i = 0; i < colLength; i++) {
       const temp = matrix[i][ swap[0] ]
       matrix[i][ swap[0] ] = matrix[i][ swap[1] ]
@@ -107,4 +109,8 @@ function decrypt(cipherText, transpositions, rowLength, colLength) {
 }
 
 const cipherText = encrypt(plainText, transpositions, rowLength, colLength)
-const plainText = decrypt(cipherText, transpositions, rowLength, colLength)
+const decryptedText = decrypt(cipherText, transpositions, rowLength, colLength)
+
+console.log(plainText)
+console.log(cipherText)
+console.log(decryptedText)
