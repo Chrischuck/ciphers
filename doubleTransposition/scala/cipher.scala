@@ -6,7 +6,7 @@ class DoubleTransposition(val r: Int, val c: Int, val k: Map[String, Array[Array
   var key: Map[String, Array[Array[Int]]] = k
 
   def encrypt(plaintext: String) {
-
+    
   }
 }
 
