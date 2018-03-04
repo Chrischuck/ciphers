@@ -1,26 +1,25 @@
 import scala.collection.mutable.{Map}
 
-// no column length because that will change depending on the length of plaintext
-class DoubleTransposition(val r: Int, val k: Map[String, Array[Array[Int]]]) {
-  var rows: Int = r
+// no rows length because that will change depending on the length of plaintext
+class DoubleTransposition(val c: Int, val k: Map[String, Array[Array[Int]]]) {
+  var columns: Int = c
   var key: Map[String, Array[Array[Int]]] = k
 
   def encrypt(plaintext: String): String =  {
-    val matrix = Array[Array[String]]()
+    val matrix = Array.ofDim[Char](math.ceil(plaintext.length().toDouble / this.columns.toDouble).toInt, this.columns)
 
     var count = 0
-    var row = Array[String]()
+    var rowCount = 0
+
     for (l <- plaintext) {
-      if (count < this.rows) {
-        row :+ l
-        count += 1
-      } else {
-        matrix :+ row
-        row = Array()
+      matrix(rowCount)(count) = l
+      count += 1
+      if (count >= this.columns) {
         count = 0
+        rowCount += 1
       }
     }
-
+    println(matrix.map(_.mkString).mkString("\n"))
 
     return plaintext
   }
@@ -40,6 +39,6 @@ object Run {
     )
 
     val dt = new DoubleTransposition(3, key)
-    println(dt.encrypt("hi"))
+    println(dt.encrypt("fourscoreand"))
   }
 }
