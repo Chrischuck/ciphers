@@ -1,6 +1,7 @@
 # Ciphers 🕰
 
-A bunch of ciphers. Built with JS and love. 
+A bunch of ciphers. Built with JS, Scala, and love. 
 
 ## Goals of this repo
 - [ ] Learn About Ciphers
+- [ ] Learn Scala
