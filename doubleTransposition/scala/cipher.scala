@@ -5,14 +5,22 @@ class DoubleTransposition(val c: Int, val k: Map[String, Array[Array[Int]]]) {
   var columns: Int = c
   var key: Map[String, Array[Array[Int]]] = k
 
-  def encrypt(plaintext: String): String =  {
-    val rows: Int = math.ceil(plaintext.length().toDouble / this.columns.toDouble).toInt
+  def encrypt(plaintext: String): String = {
+    return this.process(plaintext, true)
+  }
+
+  def decrypt(ciphertext: String): String = {
+    return this.process(ciphertext, false)
+  }
+
+  def process(text: String, encrypt: Boolean): String =  {
+    val rows: Int = math.ceil(text.length().toDouble / this.columns.toDouble).toInt
     val matrix = Array.ofDim[Char](rows, this.columns)
 
     var count = 0
     var rowCount = 0
 
-    for (l <- plaintext) {
+    for (l <- text) {
       matrix(rowCount)(count) = l
       count += 1
       if (count >= this.columns) {
@@ -21,8 +29,8 @@ class DoubleTransposition(val c: Int, val k: Map[String, Array[Array[Int]]]) {
       }
     }
 
-    val rowTranspositions = this.key.get("rows").get
-    val columnTranspositions = this.key.get("columns").get
+    val rowTranspositions = if (encrypt) this.key.get("rows").get else this.key.get("rows").get.reverse
+    val columnTranspositions = if (encrypt) this.key.get("columns").get else this.key.get("columns").get.reverse
 
     // row transpositions
     for (transposition <- rowTranspositions) {
@@ -32,7 +40,7 @@ class DoubleTransposition(val c: Int, val k: Map[String, Array[Array[Int]]]) {
         matrix(transposition(1)) = temp
       }
     }
-    
+
     // column transpositions
     for (transposition <- columnTranspositions) {
       if (matrix(0).length > transposition(0) && matrix(0).length > transposition(1)) {
@@ -65,15 +73,19 @@ object Run {
     val key = Map(
       "rows" -> Array(
         Array(0, 2),
-        Array(4, 1)
+        Array(4, 1),
+        Array(3, 6)
       ),
       "columns" -> Array(
         Array(1, 2),
-        Array(0, 2)
+        Array(0, 2),
       )
     )
 
-    val dt = new DoubleTransposition(3, key)
-    println(dt.encrypt("fourscoreandsevenyearsago"))
+    val dt = new DoubleTransposition(4, key)
+    val cipherText: String = dt.encrypt("fourscoreandsevenyearsago")
+    println(cipherText)
+    println(dt.decrypt(cipherText))
+    
   }
 }
