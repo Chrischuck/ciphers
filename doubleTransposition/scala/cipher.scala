@@ -6,7 +6,8 @@ class DoubleTransposition(val c: Int, val k: Map[String, Array[Array[Int]]]) {
   var key: Map[String, Array[Array[Int]]] = k
 
   def encrypt(plaintext: String): String =  {
-    val matrix = Array.ofDim[Char](math.ceil(plaintext.length().toDouble / this.columns.toDouble).toInt, this.columns)
+    val rows: Int = math.ceil(plaintext.length().toDouble / this.columns.toDouble).toInt
+    val matrix = Array.ofDim[Char](rows, this.columns)
 
     var count = 0
     var rowCount = 0
@@ -19,10 +20,43 @@ class DoubleTransposition(val c: Int, val k: Map[String, Array[Array[Int]]]) {
         rowCount += 1
       }
     }
-    println(matrix.map(_.mkString).mkString("\n"))
 
-    return plaintext
+    val rowTranspositions = this.key.get("rows").get
+    val columnTranspositions = this.key.get("columns").get
+
+    // row transpositions
+    for (transposition <- rowTranspositions) {
+      if (matrix.length > transposition(0) && matrix.length > transposition(1)) {
+        val temp = matrix(transposition(0))
+        matrix(transposition(0)) = matrix(transposition(1))
+        matrix(transposition(1)) = temp
+      }
+    }
+    
+    // column transpositions
+    for (transposition <- columnTranspositions) {
+      if (matrix(0).length > transposition(0) && matrix(0).length > transposition(1)) {
+        for (i <- 0 to rows - 1) {
+          val temp = matrix(i)(transposition(0))
+          matrix(i)(transposition(0)) = matrix(i)(transposition(1))
+          matrix(i)(transposition(1)) = temp
+        }
+      }
+    }
+
+    return this.arrayToString(matrix)
   }
+
+  def arrayToString(matrix: Array[Array[Char]]): String = {
+    var cipherText = ""
+    for (row <- matrix) {
+      for (char <- row) {
+        cipherText += char
+      }
+    }
+    return cipherText
+  }
+
 }
 
 object Run {
@@ -34,11 +68,12 @@ object Run {
         Array(4, 1)
       ),
       "columns" -> Array(
-        Array(1, 2)
+        Array(1, 2),
+        Array(0, 2)
       )
     )
 
     val dt = new DoubleTransposition(3, key)
-    println(dt.encrypt("fourscoreand"))
+    println(dt.encrypt("fourscoreandsevenyearsago"))
   }
 }
